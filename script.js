@@ -25,12 +25,12 @@ motionStyles.textContent = `
 .scroll-reveal--left{transform:translate3d(-78px,0,0)}
 .scroll-reveal--right{transform:translate3d(78px,0,0)}
 .scroll-reveal--scale{transform:scale(.88)}
-.scroll-reveal.is-visible{opacity:1;filter:blur(0);transform:translate3d(0,0,0) scale(1);will-change:auto}
+.scroll-reveal.is-visible{opacity:1;filter:blur(0);transform:translate3d(0,0,0) scale(1);translate:var(--scroll-motion-x,0) var(--scroll-motion-y,0);transition:opacity 860ms cubic-bezier(.22,1,.36,1),transform 860ms cubic-bezier(.22,1,.36,1),filter 760ms ease,translate 120ms linear;will-change:translate}
 .scroll-progress{position:fixed;inset:0 0 auto;z-index:100;width:100%;height:4px;background:linear-gradient(90deg,#5cb70c,#ffc91e);box-shadow:0 2px 12px rgba(255,201,30,.42);transform:scaleX(0);transform-origin:left center;pointer-events:none;will-change:transform}
 .hero__topbar,.hero__copy,.hero__visual{animation:hero-enter 800ms cubic-bezier(.22,1,.36,1) both}.hero__copy{animation-delay:100ms}.hero__visual{animation-delay:220ms}
 @keyframes hero-enter{from{opacity:0;transform:translate3d(0,24px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@media(max-width:640px){.hero__bg img{transform:translate3d(0,var(--hero-parallax,0),0) scale(1.14)!important}.hero__poster-hero{transform:translate3d(-50%,calc(-50% + var(--hero-product-parallax,0)),0)!important}}
-@media(prefers-reduced-motion:reduce){.hero-divider__track{animation:none!important}.scroll-reveal,.scroll-reveal--left,.scroll-reveal--right,.scroll-reveal--scale,.hero__topbar,.hero__copy,.hero__visual{opacity:1;filter:none;transform:none;animation:none;transition:none}.scroll-progress{display:none}}
+@media(max-width:640px){.hero__bg img{transform:translate3d(0,var(--hero-parallax,0),0) scale(1.14)!important}.hero__poster-hero{transform:translate3d(calc(-50% - 8px),calc(-50% + var(--hero-product-parallax,0)),0)!important}}
+@media(prefers-reduced-motion:reduce){.hero-divider__track{animation:none!important}.scroll-reveal,.scroll-reveal--left,.scroll-reveal--right,.scroll-reveal--scale,.hero__topbar,.hero__copy,.hero__visual{opacity:1;filter:none;transform:none;translate:none;animation:none;transition:none}.scroll-progress{display:none}}
 `;
 document.head.appendChild(motionStyles);
 
@@ -44,7 +44,11 @@ scrollProgress.className = "scroll-progress";
 scrollProgress.setAttribute("aria-hidden", "true");
 document.body.prepend(scrollProgress);
 
+const revealElements = [];
+let scrollFrame = 0;
+
 const updateScrollEffects = () => {
+  scrollFrame = 0;
   const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
   const progress = scrollableHeight > 0 ? Math.min(window.scrollY / scrollableHeight, 1) : 0;
   scrollProgress.style.transform = `scaleX(${progress})`;
@@ -54,11 +58,29 @@ const updateScrollEffects = () => {
     hero.style.setProperty("--hero-parallax", `${heroProgress * 42}px`);
     hero.style.setProperty("--hero-product-parallax", `${heroProgress * -18}px`);
   }
+
+  if (!reducedMotionPreference.matches) {
+    revealElements.forEach((element, index) => {
+      const rect = element.getBoundingClientRect();
+      if (rect.bottom < -80 || rect.top > window.innerHeight + 80) return;
+
+      const distance = Math.max(-1, Math.min(1,
+        (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight
+      ));
+      const verticalShift = distance * (index % 2 === 0 ? 16 : -16);
+      const horizontalShift = distance * (index % 3 === 0 ? 5 : -5);
+      element.style.setProperty("--scroll-motion-y", `${verticalShift.toFixed(2)}px`);
+      element.style.setProperty("--scroll-motion-x", `${horizontalShift.toFixed(2)}px`);
+    });
+  }
 };
 
-updateScrollEffects();
-window.addEventListener("scroll", updateScrollEffects, { passive: true });
-window.addEventListener("resize", updateScrollEffects);
+const requestScrollUpdate = () => {
+  if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateScrollEffects);
+};
+
+window.addEventListener("scroll", requestScrollUpdate, { passive: true });
+window.addEventListener("resize", requestScrollUpdate);
 
 const revealGroups = [
   [".section-intro", ""], [".compare-card", "scroll-reveal--scale"],
@@ -70,7 +92,6 @@ const revealGroups = [
   [".final-card__visual", "scroll-reveal--right"], [".site-footer__bottom", ""],
 ];
 
-const revealElements = [];
 revealGroups.forEach(([selector, variant]) => {
   document.querySelectorAll(selector).forEach((element, index) => {
     element.classList.add("scroll-reveal");
@@ -92,6 +113,8 @@ if (reducedMotionPreference.matches || !("IntersectionObserver" in window)) {
   }, { threshold: 0.04, rootMargin: "0px 0px -24px 0px" });
   revealElements.forEach((element) => revealObserver.observe(element));
 }
+
+updateScrollEffects();
 
 if (stickyCta && hero) {
   const toggleStickyCta = () => {
