@@ -1,4 +1,4 @@
-const CHECKOUT_URL = "https://seu-link-de-checkout-aqui.com";
+const CHECKOUT_URL = "https://pay.kiwify.com.br/97mfEBa";
 
 const hasRealCheckout =
   typeof CHECKOUT_URL === "string" &&
