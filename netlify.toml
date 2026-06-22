@@ -2,6 +2,16 @@
   publish = "."
   command = ""
 
+[[headers]]
+  for = "/script.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/style.css"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
 [[redirects]]
   from = "/favicon.ico"
   to = "https://6a38f6026a5a1f84a8b34657--postercraquesdomundo.netlify.app/assets/custom/logo.svg"
