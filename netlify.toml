@@ -3,6 +3,12 @@
   command = ""
 
 [[redirects]]
+  from = "/favicon.ico"
+  to = "https://6a38f6026a5a1f84a8b34657--postercraquesdomundo.netlify.app/assets/custom/logo.svg"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/assets/*"
   to = "https://6a38f6026a5a1f84a8b34657--postercraquesdomundo.netlify.app/assets/:splat"
   status = 200
