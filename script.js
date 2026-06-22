@@ -15,19 +15,22 @@ document.querySelectorAll("[data-checkout]").forEach((element) => {
 
 const motionStyles = document.createElement("style");
 motionStyles.textContent = `
-.hero-divider__track{animation-duration:18s!important;animation-timing-function:linear!important;animation-iteration-count:infinite!important;backface-visibility:hidden}
+.hero__bg img{transform:translate3d(0,var(--hero-parallax,0),0) scale(1.03)!important;transition:transform 100ms linear}
+.hero__poster-hero{transform:translate3d(-50%,var(--hero-product-parallax,0),0)!important}
+.hero-divider__track{animation-duration:12s!important;animation-timing-function:linear!important;animation-iteration-count:infinite!important;backface-visibility:hidden}
 .hero-divider::before,.hero-divider::after{content:"";position:absolute;inset-block:0;z-index:2;width:clamp(18px,4vw,72px);pointer-events:none}
 .hero-divider::before{left:0;background:linear-gradient(90deg,#081108,transparent)}
 .hero-divider::after{right:0;background:linear-gradient(-90deg,#081108,transparent)}
-.scroll-reveal{opacity:0;transform:translate3d(0,34px,0);transition:opacity 720ms cubic-bezier(.22,1,.36,1),transform 720ms cubic-bezier(.22,1,.36,1);transition-delay:var(--reveal-delay,0ms);will-change:opacity,transform}
-.scroll-reveal--left{transform:translate3d(-42px,0,0)}
-.scroll-reveal--right{transform:translate3d(42px,0,0)}
-.scroll-reveal--scale{transform:scale(.94)}
-.scroll-reveal.is-visible{opacity:1;transform:translate3d(0,0,0) scale(1);will-change:auto}
-.hero__topbar,.hero__copy,.hero__visual{animation:hero-enter 800ms cubic-bezier(.22,1,.36,1) both}
-.hero__copy{animation-delay:100ms}.hero__visual{animation-delay:220ms}
+.scroll-reveal{opacity:0;filter:blur(6px);transform:translate3d(0,64px,0);transition:opacity 860ms cubic-bezier(.22,1,.36,1),transform 860ms cubic-bezier(.22,1,.36,1),filter 760ms ease;transition-delay:var(--reveal-delay,0ms);will-change:opacity,transform,filter}
+.scroll-reveal--left{transform:translate3d(-78px,0,0)}
+.scroll-reveal--right{transform:translate3d(78px,0,0)}
+.scroll-reveal--scale{transform:scale(.88)}
+.scroll-reveal.is-visible{opacity:1;filter:blur(0);transform:translate3d(0,0,0) scale(1);will-change:auto}
+.scroll-progress{position:fixed;inset:0 0 auto;z-index:100;width:100%;height:4px;background:linear-gradient(90deg,#5cb70c,#ffc91e);box-shadow:0 2px 12px rgba(255,201,30,.42);transform:scaleX(0);transform-origin:left center;pointer-events:none;will-change:transform}
+.hero__topbar,.hero__copy,.hero__visual{animation:hero-enter 800ms cubic-bezier(.22,1,.36,1) both}.hero__copy{animation-delay:100ms}.hero__visual{animation-delay:220ms}
 @keyframes hero-enter{from{opacity:0;transform:translate3d(0,24px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@media(prefers-reduced-motion:reduce){.hero-divider__track{animation:none!important}.scroll-reveal,.scroll-reveal--left,.scroll-reveal--right,.scroll-reveal--scale,.hero__topbar,.hero__copy,.hero__visual{opacity:1;transform:none;animation:none;transition:none}}
+@media(max-width:640px){.hero__bg img{transform:translate3d(0,var(--hero-parallax,0),0) scale(1.14)!important}.hero__poster-hero{transform:translate3d(-50%,calc(-50% + var(--hero-product-parallax,0)),0)!important}}
+@media(prefers-reduced-motion:reduce){.hero-divider__track{animation:none!important}.scroll-reveal,.scroll-reveal--left,.scroll-reveal--right,.scroll-reveal--scale,.hero__topbar,.hero__copy,.hero__visual{opacity:1;filter:none;transform:none;animation:none;transition:none}.scroll-progress{display:none}}
 `;
 document.head.appendChild(motionStyles);
 
@@ -36,21 +39,35 @@ const hero = document.querySelector(".hero");
 const purchaseToast = document.querySelector(".purchase-toast");
 const reducedMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+const scrollProgress = document.createElement("div");
+scrollProgress.className = "scroll-progress";
+scrollProgress.setAttribute("aria-hidden", "true");
+document.body.prepend(scrollProgress);
+
+const updateScrollEffects = () => {
+  const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollableHeight > 0 ? Math.min(window.scrollY / scrollableHeight, 1) : 0;
+  scrollProgress.style.transform = `scaleX(${progress})`;
+
+  if (!reducedMotionPreference.matches && hero) {
+    const heroProgress = Math.min(window.scrollY / Math.max(hero.offsetHeight, 1), 1);
+    hero.style.setProperty("--hero-parallax", `${heroProgress * 42}px`);
+    hero.style.setProperty("--hero-product-parallax", `${heroProgress * -18}px`);
+  }
+};
+
+updateScrollEffects();
+window.addEventListener("scroll", updateScrollEffects, { passive: true });
+window.addEventListener("resize", updateScrollEffects);
+
 const revealGroups = [
-  [".section-intro", ""],
-  [".compare-card", "scroll-reveal--scale"],
-  [".benefit-item", ""],
-  [".step-card", ""],
-  [".offer__media", "scroll-reveal--left"],
-  [".offer__content", "scroll-reveal--right"],
-  [".special-offer__copy", "scroll-reveal--left"],
-  [".special-offer__card", "scroll-reveal--right"],
-  [".audience-card", ""],
-  [".guarantee-card", "scroll-reveal--scale"],
-  [".faq-item", ""],
-  [".final-card__copy", "scroll-reveal--left"],
-  [".final-card__visual", "scroll-reveal--right"],
-  [".site-footer__bottom", ""],
+  [".section-intro", ""], [".compare-card", "scroll-reveal--scale"],
+  [".benefit-item", ""], [".step-card", ""],
+  [".offer__media", "scroll-reveal--left"], [".offer__content", "scroll-reveal--right"],
+  [".special-offer__copy", "scroll-reveal--left"], [".special-offer__card", "scroll-reveal--right"],
+  [".audience-card", ""], [".guarantee-card", "scroll-reveal--scale"],
+  [".faq-item", ""], [".final-card__copy", "scroll-reveal--left"],
+  [".final-card__visual", "scroll-reveal--right"], [".site-footer__bottom", ""],
 ];
 
 const revealElements = [];
@@ -66,23 +83,19 @@ revealGroups.forEach(([selector, variant]) => {
 if (reducedMotionPreference.matches || !("IntersectionObserver" in window)) {
   revealElements.forEach((element) => element.classList.add("is-visible"));
 } else {
-  const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.14, rootMargin: "0px 0px -8% 0px" },
-  );
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.04, rootMargin: "0px 0px -24px 0px" });
   revealElements.forEach((element) => revealObserver.observe(element));
 }
 
 if (stickyCta && hero) {
   const toggleStickyCta = () => {
-    const triggerPoint = hero.offsetHeight * 0.55;
-    stickyCta.classList.toggle("sticky-cta--visible", window.scrollY > triggerPoint);
+    stickyCta.classList.toggle("sticky-cta--visible", window.scrollY > hero.offsetHeight * 0.55);
   };
   toggleStickyCta();
   window.addEventListener("scroll", toggleStickyCta, { passive: true });
@@ -110,10 +123,7 @@ if (purchaseToast) {
     hideTimer = window.setTimeout(hideToast, 4200);
   };
   if (!reducedMotionPreference.matches) {
-    window.setTimeout(() => {
-      showToast();
-      window.setInterval(showToast, 14000);
-    }, 2200);
+    window.setTimeout(() => { showToast(); window.setInterval(showToast, 14000); }, 2200);
   } else {
     toastTitle.textContent = purchaseMessages[0].title;
     toastMeta.textContent = purchaseMessages[0].meta;
