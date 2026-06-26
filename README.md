@@ -1,9 +1,31 @@
-# Craques da Copa
+# Craques do Mundo
 
-Landing page com as imagens criadas implementadas como assets locais em WebP.
+Landing page em Astro para o kit digital Craques do Mundo.
 
-## Publicação
-Suba todos os arquivos e a pasta `assets/` para o GitHub Pages.
+## Desenvolvimento
 
-## Checkout
-Edite `script.js` e troque `CHECKOUT_URL`.
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+Saida de publicacao: `dist`.
+
+## Deploy
+
+Netlify:
+
+- Build command: `npm run build`
+- Publish directory: `dist`
+
+Vercel:
+
+- Framework: Astro
+- Build command: `npm run build`
+- Output directory: `dist`
