@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title">
+  <title id="title">Criança usando tela antes da atividade</title>
+  <rect width="900" height="900" fill="#f8f8f3"/>
+  <circle cx="450" cy="400" r="285" fill="#e7ece0"/>
+  <rect x="180" y="455" width="540" height="310" rx="38" fill="#232a25"/>
+  <rect x="226" y="495" width="448" height="218" rx="22" fill="#3d4650"/>
+  <circle cx="450" cy="740" r="13" fill="#99a19c"/>
+  <g fill="none" stroke="#101510" stroke-linecap="round" stroke-linejoin="round" stroke-width="16">
+    <circle cx="450" cy="255" r="70" fill="#fff"/>
+    <path d="M349 442c25-75 175-75 202 0"/>
+    <path d="M352 318c61 34 133 34 196 0"/>
+    <path d="M405 250h.1M495 250h.1"/>
+    <path d="M412 302c26 16 52 16 76 0" opacity=".45"/>
+  </g>
+  <text x="450" y="108" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="82" fill="#242a25">MUITO TEMPO</text>
+  <text x="450" y="178" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="70" fill="#5e6660">NA TELA</text>
+  <text x="450" y="830" text-anchor="middle" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="800" fill="#5d675e">A tarde passa e a brincadeira não acontece.</text>
+</svg>
