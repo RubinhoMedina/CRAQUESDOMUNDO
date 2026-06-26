@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-labelledby="title">
+  <title id="title">Ícone de proteção</title>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8cdc1c"/><stop offset="1" stop-color="#ffd33a"/></linearGradient></defs>
+  <rect width="220" height="220" rx="52" fill="#102416"/>
+  <path d="M110 28 176 55v47c0 43-27 79-66 92-39-13-66-49-66-92V55Z" fill="url(#g)"/>
+  <path d="m75 111 25 25 48-55" fill="none" stroke="#071008" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
