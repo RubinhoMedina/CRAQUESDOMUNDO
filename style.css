@@ -1521,4 +1521,65 @@ summary {
   }
 }
 
+/* LOOP INFINITO DAS BANDEIRAS */
+.hero-divider {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
 
+.hero-divider__track {
+  display: flex;
+  width: max-content;
+  animation: flagsSlideLoop 18s linear infinite;
+  will-change: transform;
+}
+
+.hero-divider__track img {
+  display: block;
+  flex: 0 0 auto;
+  width: 100vw;
+  min-width: 100vw;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* efeito suave nas laterais */
+.hero-divider::before,
+.hero-divider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 90px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-divider::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(7, 16, 8, 1), rgba(7, 16, 8, 0));
+}
+
+.hero-divider::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(7, 16, 8, 1), rgba(7, 16, 8, 0));
+}
+
+@keyframes flagsSlideLoop {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* acessibilidade: reduz movimento para quem usa essa configuração */
+@media (prefers-reduced-motion: reduce) {
+  .hero-divider__track {
+    animation: none;
+  }
+}
