@@ -83,3 +83,59 @@ if (purchaseToast) {
     toastMeta.textContent = first.meta;
   }
 }
+
+```js
+// EFEITOS DE ROLAGEM - SURGIR SUBINDO, DIREITA E ESQUERDA
+(() => {
+  const revealGroups = [
+    {
+      selector: ".section-intro, .offer__content, .special-offer__copy, .final-card__copy, .guarantee-card__content",
+      effect: "reveal-up",
+    },
+    {
+      selector: ".compare-card--muted, .offer__media, .guarantee-card__seal",
+      effect: "reveal-left",
+    },
+    {
+      selector: ".compare-card--accent, .special-offer__card, .final-card__visual, .guarantee-card__side",
+      effect: "reveal-right",
+    },
+    {
+      selector: ".benefit-item, .step-card, .audience-card, .faq-item, .check-list li",
+      effect: "reveal-up",
+    },
+  ];
+
+  const elements = [];
+
+  revealGroups.forEach((group) => {
+    document.querySelectorAll(group.selector).forEach((element, index) => {
+      element.classList.add("reveal-scroll", group.effect);
+
+      const delayClass = `reveal-delay-${(index % 4) + 1}`;
+      element.classList.add(delayClass);
+
+      elements.push(element);
+    });
+  });
+
+  if (!elements.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.16,
+      rootMargin: "0px 0px -70px 0px",
+    }
+  );
+
+  elements.forEach((element) => observer.observe(element));
+})();
+```
