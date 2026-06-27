@@ -1751,3 +1751,16 @@ summary {
 .section--dark .step-card {
   overflow: visible !important;
 }
+
+/* AUMENTO DE 20% DO TÍTULO DA HERO NO MOBILE */
+@media (max-width: 640px) {
+  .hero__copy h1 {
+    font-size: 46px !important;
+  }
+}
+
+@media (max-width: 370px) {
+  .hero__copy h1 {
+    font-size: 35px !important;
+  }
+}
