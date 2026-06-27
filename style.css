@@ -1602,3 +1602,71 @@ summary {
   }
 }
 ```
+/* CORREÇÃO DOS ÍCONES QUE SUMIRAM */
+
+/* Ícones dos cards "Como funciona" */
+.step-card__icon {
+  display: grid !important;
+  place-items: center !important;
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  border-radius: 20px !important;
+  color: #10200f !important;
+  background: #8cdc1c !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.step-card__icon svg {
+  display: block !important;
+  width: 30px !important;
+  height: 30px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ícones de check da lista "O que vem no kit" */
+.check-list li {
+  display: flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 14px 16px !important;
+  border: 1px solid rgba(13, 29, 18, 0.12) !important;
+  border-radius: 17px !important;
+  background: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.check-list svg {
+  display: block !important;
+  width: 23px !important;
+  height: 23px !important;
+  min-width: 23px !important;
+  fill: none !important;
+  stroke: #175f1d !important;
+  stroke-width: 2.4 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.check-list span {
+  display: block !important;
+  color: #152118 !important;
+}
+
+/* Garante que os SVGs internos continuem aparecendo */
+.step-card__icon use,
+.check-list use,
+.btn__icon use {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
