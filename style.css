@@ -1,3 +1,4 @@
+```css
 :root {
   --bg: #071008;
   --bg-soft: #0d1710;
@@ -1472,46 +1473,65 @@ summary {
   }
 }
 
+/* FAIXA DE BANDEIRAS - SLIDE INFINITO */
 .hero-divider {
   position: relative;
   z-index: 2;
   width: 100vw;
   margin-inline: calc(50% - 50vw);
   margin-top: -1px;
+  overflow: hidden;
   line-height: 0;
   pointer-events: none;
-  overflow: hidden;
   background: #081108;
 }
 
 .hero-divider__track {
   display: flex;
   width: max-content;
+  animation: bandeirasLoop 8s linear infinite !important;
   will-change: transform;
-  animation: hero-divider-loop 22s linear infinite;
 }
 
 .hero-divider__track img {
   display: block;
   width: 100vw;
+  min-width: 100vw;
   max-width: none;
   height: auto;
   flex: 0 0 100vw;
+  pointer-events: none;
+  user-select: none;
 }
 
-@keyframes hero-divider-loop {
-  from {
+.hero-divider::before,
+.hero-divider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 80px;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-divider::before {
+  left: 0;
+  background: linear-gradient(to right, #081108, rgba(8, 17, 8, 0));
+}
+
+.hero-divider::after {
+  right: 0;
+  background: linear-gradient(to left, #081108, rgba(8, 17, 8, 0));
+}
+
+@keyframes bandeirasLoop {
+  0% {
     transform: translate3d(0, 0, 0);
   }
 
-  to {
+  100% {
     transform: translate3d(-100vw, 0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-divider__track {
-    animation: none;
   }
 }
 
@@ -1519,5 +1539,9 @@ summary {
   .hero-divider {
     margin-top: -2px;
   }
-}
 
+  .hero-divider__track {
+    animation-duration: 6s !important;
+  }
+}
+```
